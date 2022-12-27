@@ -142,7 +142,7 @@ fun TemperatureAndWeatherOverview(weatherNowBean: WeatherNowBean?, airNowBean: A
  */
 @Composable
 fun Details(weatherNowBean: WeatherNowBean?) {
-    Card(modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 18.dp)) {
+    Card(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 18.dp)) {
         Column {
             Row( // 第一列
                 Modifier

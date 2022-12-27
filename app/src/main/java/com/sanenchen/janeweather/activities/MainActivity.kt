@@ -13,6 +13,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.core.view.WindowCompat
 import com.qweather.sdk.view.HeConfig
 import com.sanenchen.janeweather.components.CurrentWeather
+import com.sanenchen.janeweather.components.PrecipitationPreview
 import com.sanenchen.janeweather.ui.theme.JaneWeatherTheme
 import com.sanenchen.janeweather.utils.APIKeys
 
@@ -57,6 +58,7 @@ class MainActivity : ComponentActivity() {
     fun Components() {
         Column {
             CurrentWeather(this@MainActivity) // 当前天气
+            PrecipitationPreview(this@MainActivity) // 降水概览
         }
     }
 }
