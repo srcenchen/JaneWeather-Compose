@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -19,6 +20,7 @@ import com.google.gson.Gson
 import com.qweather.sdk.bean.MinutelyBean
 import com.qweather.sdk.bean.base.Lang
 import com.qweather.sdk.view.QWeather
+import com.sanenchen.janeweather.R
 import com.sanenchen.janeweather.utils.SharedPreferencesUtils
 
 /**
@@ -34,16 +36,18 @@ fun PrecipitationPreview(context: Context) {
         )
     }
     // 获取降水信息
-    QWeather.getMinuteLy(context, "119.1769091,35.0505468", Lang.ZH_HANS, object : QWeather.OnResultMinutelyListener {
-        override fun onError(p0: Throwable?) {
-            minutelyBean.value = null
-        }
+    LaunchedEffect(key1 = Unit, block = {
+        QWeather.getMinuteLy(context, "119.1769091,35.0505468", Lang.ZH_HANS, object : QWeather.OnResultMinutelyListener {
+            override fun onError(p0: Throwable?) {
+                minutelyBean.value = null
+            }
 
-        override fun onSuccess(p0: MinutelyBean?) {
-            minutelyBean.value = p0
-            // 缓存
-            SharedPreferencesUtils().saveData(context, "minutelyBean", Gson().toJson(p0))
-        }
+            override fun onSuccess(p0: MinutelyBean?) {
+                minutelyBean.value = p0
+                // 缓存
+                SharedPreferencesUtils().saveData(context, "minutelyBean", Gson().toJson(p0))
+            }
+        })
     })
     Card(Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp)) {
         Row(
@@ -52,7 +56,7 @@ fun PrecipitationPreview(context: Context) {
                 .padding(16.dp)
         ) {
             Image(
-                painter = painterResource(id = com.sanenchen.janeweather.R.drawable.water),
+                painter = painterResource(id = R.drawable.water),
                 contentDescription = "降水",
                 modifier = Modifier.size(24.dp).align(Alignment.CenterVertically)
             )
