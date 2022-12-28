@@ -12,9 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.qweather.sdk.view.HeConfig
 import com.sanenchen.janeweather.components.CurrentWeather
+import com.sanenchen.janeweather.components.ForecastWeather
 import com.sanenchen.janeweather.components.HourlyWeather
 import com.sanenchen.janeweather.components.PrecipitationPreview
 import com.sanenchen.janeweather.ui.theme.JaneWeatherTheme
@@ -66,9 +68,14 @@ class MainActivity : ComponentActivity() {
             CurrentWeather(this@MainActivity) // 当前天气
             PrecipitationPreview(this@MainActivity) // 降水概览
             HourlyWeather(this@MainActivity) // 逐小时天气
+            ForecastWeather(context = this@MainActivity) // 未来天气
+            Spacer(modifier = Modifier.padding(bottom = 24.dp))
         }
     }
 
+    /**
+     * 发送重新加载指令
+     */
     override fun onResume() {
         super.onResume()
         refresh.value = !refresh.value

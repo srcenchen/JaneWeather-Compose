@@ -25,6 +25,7 @@ import com.qweather.sdk.view.QWeather
 import com.sanenchen.janeweather.activities.MainActivity
 import com.sanenchen.janeweather.utils.APIKeys
 import com.sanenchen.janeweather.utils.SharedPreferencesUtils
+import com.sanenchen.janeweather.utils.WeatherIconAdapter
 
 /**
  * @author sanenchen
@@ -113,7 +114,7 @@ fun TemperatureAndWeatherOverview(weatherNowBean: WeatherNowBean?, airNowBean: A
                     .padding(start = 16.dp)
             ) {
                 SubcomposeAsyncImage(
-                    model = "https://a.hecdn.net/img/common/icon/202106d/${icon ?: "999"}.png",
+                    model = WeatherIconAdapter.getNewIcon(icon ?: "999"),
                     contentDescription = "天气图标",
                     modifier = Modifier
                         .size(48.dp)
@@ -147,7 +148,8 @@ fun TemperatureAndWeatherOverview(weatherNowBean: WeatherNowBean?, airNowBean: A
  */
 @Composable
 fun Details(weatherNowBean: WeatherNowBean?) {
-    Card(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 18.dp)) {
+    Card(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 18.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)) {
         Column {
             Row( // 第一列
                 Modifier

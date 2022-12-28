@@ -11,10 +11,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +29,7 @@ import com.qweather.sdk.view.QWeather
 import com.sanenchen.janeweather.activities.MainActivity
 import com.sanenchen.janeweather.utils.APIKeys
 import com.sanenchen.janeweather.utils.SharedPreferencesUtils
+import com.sanenchen.janeweather.utils.WeatherIconAdapter
 
 /**
  * @author sanenchen
@@ -64,8 +62,13 @@ fun HourlyWeather(context: Context) {
             }
         })
     })
-    Card(Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp)) {
-        LazyRow(contentPadding = PaddingValues(16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    Card(
+        Modifier
+            .padding(top = 8.dp, start = 16.dp, end = 16.dp)
+            .fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
+    ) {
+        LazyRow(contentPadding = PaddingValues(16.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             if (weatherHourlyBean.value?.hourly != null) {
                 items(weatherHourlyBean.value?.hourly!!) {
                     HourlyItem(it)
@@ -101,7 +104,7 @@ fun HourlyItem(hourlyBean: WeatherHourlyBean.HourlyBean?) {
         Text(hourlyBean?.fxTime?.substring(11, 16) ?: "00:00", modifier = Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(top = 8.dp))
         SubcomposeAsyncImage(
-            model = "https://a.hecdn.net/img/common/icon/202106d/${hourlyBean?.icon}.png",
+            model = WeatherIconAdapter.getNewIcon(hourlyBean?.icon ?: "999"),
             contentDescription = "天气图标",
             modifier = Modifier
                 .size(32.dp)
@@ -114,7 +117,11 @@ fun HourlyItem(hourlyBean: WeatherHourlyBean.HourlyBean?) {
 
 @Composable
 fun HourlyDetail() {
-    Card(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 18.dp).verticalScroll(rememberScrollState())) {
+    Card(
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp, top = 18.dp, bottom = 8.dp)
+            .verticalScroll(rememberScrollState()),
+    ) {
         Column {
             Row( // 第一列
                 Modifier

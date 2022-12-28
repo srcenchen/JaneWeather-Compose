@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,11 +51,10 @@ fun PrecipitationPreview(context: Context) {
                 minutelyBean.value = p0
                 // 缓存
                 SharedPreferencesUtils().saveData(context, "minutelyBean", Gson().toJson(p0))
-                Log.i("Refresh", "Refreshed MinutelyBean")
             }
         })
     })
-    Card(Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp)) {
+    Card(Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp), elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)) {
         Row(
             Modifier
                 .fillMaxWidth()
