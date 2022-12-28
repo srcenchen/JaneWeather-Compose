@@ -1,6 +1,7 @@
 package com.sanenchen.janeweather.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -8,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.core.view.WindowCompat
@@ -25,6 +27,9 @@ import com.sanenchen.janeweather.utils.APIKeys
  */
 
 class MainActivity : ComponentActivity() {
+    companion object {
+        val refresh = mutableStateOf(false) // 全局刷新Key
+    }
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,5 +67,11 @@ class MainActivity : ComponentActivity() {
             PrecipitationPreview(this@MainActivity) // 降水概览
             HourlyWeather(this@MainActivity) // 逐小时天气
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refresh.value = !refresh.value
+        Log.i("Refresh", "Refreshed Main ${refresh.value}")
     }
 }

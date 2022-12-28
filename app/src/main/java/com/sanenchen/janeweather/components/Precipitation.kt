@@ -1,6 +1,7 @@
 package com.sanenchen.janeweather.components
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
@@ -21,7 +22,10 @@ import com.qweather.sdk.bean.MinutelyBean
 import com.qweather.sdk.bean.base.Lang
 import com.qweather.sdk.view.QWeather
 import com.sanenchen.janeweather.R
+import com.sanenchen.janeweather.activities.MainActivity
 import com.sanenchen.janeweather.utils.SharedPreferencesUtils
+import java.lang.Thread.sleep
+import kotlin.concurrent.thread
 
 /**
  * @author sanenchen
@@ -36,7 +40,7 @@ fun PrecipitationPreview(context: Context) {
         )
     }
     // 获取降水信息
-    LaunchedEffect(key1 = Unit, block = {
+    LaunchedEffect(key1 = MainActivity.refresh.value, block = {
         QWeather.getMinuteLy(context, "119.1769091,35.0505468", Lang.ZH_HANS, object : QWeather.OnResultMinutelyListener {
             override fun onError(p0: Throwable?) {
                 minutelyBean.value = null
@@ -46,6 +50,7 @@ fun PrecipitationPreview(context: Context) {
                 minutelyBean.value = p0
                 // 缓存
                 SharedPreferencesUtils().saveData(context, "minutelyBean", Gson().toJson(p0))
+                Log.i("Refresh", "Refreshed MinutelyBean")
             }
         })
     })

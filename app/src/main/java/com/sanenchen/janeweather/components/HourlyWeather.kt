@@ -1,6 +1,7 @@
 package com.sanenchen.janeweather.components
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
@@ -9,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -27,6 +29,7 @@ import coil.compose.SubcomposeAsyncImage
 import com.google.gson.Gson
 import com.qweather.sdk.bean.weather.WeatherHourlyBean
 import com.qweather.sdk.view.QWeather
+import com.sanenchen.janeweather.activities.MainActivity
 import com.sanenchen.janeweather.utils.APIKeys
 import com.sanenchen.janeweather.utils.SharedPreferencesUtils
 
@@ -47,7 +50,7 @@ fun HourlyWeather(context: Context) {
         )
     }
     // 获取24小时信息
-    LaunchedEffect(key1 = Unit, block = {
+    LaunchedEffect(key1 = MainActivity.refresh.value, block = {
         QWeather.getWeather24Hourly(context, APIKeys.placeKey, object : QWeather.OnResultWeatherHourlyListener {
             override fun onError(p0: Throwable?) {
                 weatherHourlyBean.value = null
@@ -57,6 +60,7 @@ fun HourlyWeather(context: Context) {
                 weatherHourlyBean.value = p0
                 // 缓存
                 SharedPreferencesUtils().saveData(context, "weatherHourlyBean", Gson().toJson(p0))
+                Log.i("Refresh", "Refreshed Hour")
             }
         })
     })
@@ -110,7 +114,7 @@ fun HourlyItem(hourlyBean: WeatherHourlyBean.HourlyBean?) {
 
 @Composable
 fun HourlyDetail() {
-    Box(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 18.dp)) {
+    Card(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 18.dp).verticalScroll(rememberScrollState())) {
         Column {
             Row( // 第一列
                 Modifier
@@ -209,7 +213,7 @@ fun HourlyDetail() {
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                     Text(
-                        text = "${weatherHourlyDetail.value?.pressure}mm",
+                        text = "${weatherHourlyDetail.value?.precip}mm",
                         fontSize = 14.sp,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )

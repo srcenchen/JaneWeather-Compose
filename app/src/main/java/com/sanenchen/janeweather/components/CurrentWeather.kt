@@ -1,6 +1,9 @@
 package com.sanenchen.janeweather.components
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -19,6 +22,7 @@ import com.qweather.sdk.bean.base.Lang
 import com.qweather.sdk.bean.base.Unit
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import com.qweather.sdk.view.QWeather
+import com.sanenchen.janeweather.activities.MainActivity
 import com.sanenchen.janeweather.utils.APIKeys
 import com.sanenchen.janeweather.utils.SharedPreferencesUtils
 
@@ -53,7 +57,7 @@ fun CurrentWeather(context: Context) {
         )
     }
 
-    LaunchedEffect(key1 = Unit, block = {
+    LaunchedEffect(key1 = MainActivity.refresh.value, block = {
         // 获取当前天气
         QWeather.getWeatherNow(context, APIKeys.placeKey, Lang.ZH_HANS, Unit.METRIC, object : QWeather.OnResultWeatherNowListener {
             override fun onError(p0: Throwable?) {
@@ -64,6 +68,7 @@ fun CurrentWeather(context: Context) {
                 weatherNowBean.value = p0
                 // 持久化数据
                 SharedPreferencesUtils().saveData(context, "weatherNowBean", Gson().toJson(p0))
+                Log.i("Refresh", "Refreshed weatherNowBean")
             }
         })
         // 获取当前空气质量
@@ -284,5 +289,3 @@ fun Details(weatherNowBean: WeatherNowBean?) {
 
     }
 }
-
-
